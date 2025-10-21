@@ -7,5 +7,6 @@ variable "zone_id"{
 } 
 
 variable "domain_name"{
-    default = "dawsdevops86.fun"
+        default = "dawsdevops86.fun"
 }
+                
