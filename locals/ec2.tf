@@ -1,19 +1,18 @@
 resource "aws_instance" "terraform" {
-    ami = var.ami_id
-    instance_type = var.instance_type
+    ami = local.ami_id
+    instance_type = local.instance_type 
     vpc_security_group_ids = [aws_security_group.allow_all.id]
-
-    tags = var.ec2_tags
+    tags = local.ec2_tags
 }
 
 
 resource "aws_security_group" "allow_all" {
-  name   = var.sg_name
+  name   = "${local.common_name}-allow-all"
   
   egress {
     from_port        = var.egress_from_port
     to_port          = var.egress_to_port
-    protocol         = var.protocol# -1 means all protocols
+    protocol         = var.protocol # -1 means all protocols
     cidr_blocks      = var.cidr # internet
   }
 
@@ -25,8 +24,12 @@ resource "aws_security_group" "allow_all" {
   }  
   
 
-   tags = {
-    Name = "allow-all"
-  }
+   tags = merge(
+      var.common_tags,
+      {
+        Name = "${local.common_name}-allow-all"
+        Purpose = "locals"
+      }
+    )
 
 }
